@@ -2,7 +2,6 @@
 
 **HPC-Scale Distributed Compute Benchmark Suite** — measuring **throughput**, **round-trip latency**, and **jitter** on distributed workloads. A **C++ worker** (low overhead) plus a **Python** orchestration layer (YAML scenarios, statistics, JSON reports).
 
-**Repository:** [github.com/AltUser44/HCP-bench](https://github.com/AltUser44/HCP-bench)
 
 ## What this measures
 
