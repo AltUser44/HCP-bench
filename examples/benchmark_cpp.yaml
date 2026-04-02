@@ -1,0 +1,27 @@
+# Same matrix as benchmark.yaml but uses the C++ hcp_worker (build first).
+# Windows: cmake --build cpp/build --config Release
+suite: hcp-scale-demo-cpp
+
+worker:
+  backend: cpp
+  exe: cpp/build/Release/hcp_worker.exe # Windows
+  # exe: cpp/build/hcp_worker            # Linux / macOS
+
+bind:
+  host: "0.0.0.0"
+  port: 9000
+
+connect_host: "127.0.0.1"
+
+targets:
+  - name: loopback-ping
+    host: "127.0.0.1"
+    mode: ping
+    count: 2000
+    warmup: 200
+
+  - name: loopback-throughput
+    host: "127.0.0.1"
+    mode: throughput
+    bytes: 33554432
+    chunk: 65536

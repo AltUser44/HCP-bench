@@ -1,0 +1,30 @@
+# HCP benchmark matrix — tune counts/bytes for your cluster.
+suite: hcp-scale-demo
+
+worker:
+  # Use the pure-Python worker by default (no C++ build required).
+  backend: python
+  # For the C++ worker after building:
+  # backend: cpp
+  # exe: cpp/build/Release/hcp_worker.exe   # Windows
+  # exe: cpp/build/hcp_worker                # Linux/macOS
+
+bind:
+  host: "0.0.0.0"
+  port: 9000
+
+# Used to wait for the listening socket when bind is 0.0.0.0
+connect_host: "127.0.0.1"
+
+targets:
+  - name: loopback-ping
+    host: "127.0.0.1"
+    mode: ping
+    count: 2000
+    warmup: 200
+
+  - name: loopback-throughput
+    host: "127.0.0.1"
+    mode: throughput
+    bytes: 33554432
+    chunk: 65536

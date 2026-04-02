@@ -1,0 +1,42 @@
+# Two machines on the same L2 switch (or same broadcast domain).
+#
+# Receiver (server) node: start the worker manually and leave it running:
+#   hcp_worker --server --bind 0.0.0.0 --port 9000
+#   # or: python -m hcpbench.worker_py --server --bind 0.0.0.0 --port 9000
+#
+# Sender (this machine): run hcpbench from the repo; it only runs the CLIENT
+# toward RECEIVER_IP (no local server is started).
+#
+# Replace RECEIVER_IP with the server's address (e.g. 10.0.0.12).
+# Open the firewall for TCP 9000 on the receiver if needed.
+
+suite: hcp-two-hosts-switch
+
+worker:
+  backend: python
+  # Use C++ on both ends for apples-to-apples max throughput:
+  # backend: cpp
+  # exe: cpp/build/Release/hcp_worker.exe
+
+bind:
+  host: "0.0.0.0"
+  port: 9000
+
+# Must match where the server is listening (used only when start_server is true)
+connect_host: "127.0.0.1"
+
+# Do not spawn a server subprocess — it runs on the other machine
+external_server: true
+
+targets:
+  - name: cross-host-ping
+    host: "RECEIVER_IP"
+    mode: ping
+    count: 10000
+    warmup: 1000
+
+  - name: cross-host-throughput
+    host: "RECEIVER_IP"
+    mode: throughput
+    bytes: 536870912
+    chunk: 1048576
